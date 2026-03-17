@@ -44,23 +44,19 @@ export class FaceTracker {
     await tf.ready()
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
     this.detector = await faceLandmarksDetection.createDetector(model, {
-      runtime: 'tfjs',
+      runtime: 'mediapipe',
+      solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
       refineLandmarks: false,
       maxFaces: 1,
     })
   }
 
   async detect() {
-    if (!this.detector || this.video.readyState < 2) {
-      console.log('detect blocked: detector=', !!this.detector, 'readyState=', this.video.readyState)
-      return null
-    }
+    if (!this.detector || this.video.readyState < 2) return null
     try {
-      console.log('video:', this.video.videoWidth, 'x', this.video.videoHeight, 'readyState:', this.video.readyState, 'paused:', this.video.paused)
       const faces = await this.detector.estimateFaces(this.video, {
         flipHorizontal: false,
       })
-      console.log('faces found:', faces.length)
       return faces.length > 0 ? faces[0].keypoints : null
     } catch (e) {
       console.error('detect error:', e)
