@@ -44,7 +44,8 @@ export class FaceTracker {
     await tf.ready()
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
     this.detector = await faceLandmarksDetection.createDetector(model, {
-      runtime: 'tfjs',
+      runtime: 'mediapipe',
+      solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619',
       refineLandmarks: false,
       maxFaces: 1,
     })
