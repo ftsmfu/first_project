@@ -6,6 +6,8 @@ export class FaceTracker {
   constructor() {
     this.detector = null
     this.video = null
+    this.canvas = null
+    this.ctx = null
     this.stream = null
     this.videoWidth = 640
     this.videoHeight = 480
@@ -38,6 +40,11 @@ export class FaceTracker {
     })
 
     await this.video.play()
+
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = this.videoWidth
+    this.canvas.height = this.videoHeight
+    this.ctx = this.canvas.getContext('2d')
   }
 
   async loadModel() {
@@ -53,7 +60,8 @@ export class FaceTracker {
   async detect() {
     if (!this.detector || this.video.readyState < 2) return null
     try {
-      const faces = await this.detector.estimateFaces(this.video, {
+      this.ctx.drawImage(this.video, 0, 0, this.videoWidth, this.videoHeight)
+      const faces = await this.detector.estimateFaces(this.canvas, {
         flipHorizontal: false,
       })
       return faces.length > 0 ? faces[0].keypoints : null
