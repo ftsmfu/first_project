@@ -1,0 +1,20 @@
+{
+  "name": "face-mesh-3d",
+  "version": "1.0.0",
+  "description": "Real-time 3D face mesh from webcam",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@tensorflow-models/face-landmarks-detection": "^1.0.5",
+    "@tensorflow/tfjs": "^4.22.0",
+    "three": "^0.172.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

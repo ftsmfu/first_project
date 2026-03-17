@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Mesh 3D</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; }
+    #app { width: 100vw; height: 100vh; }
+
+    #video-preview {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 220px;
+      height: 165px;
+      border: 1px solid rgba(0, 200, 255, 0.35);
+      border-radius: 8px;
+      transform: scaleX(-1);
+      object-fit: cover;
+      opacity: 0.85;
+    }
+
+    #status {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: rgba(0, 200, 255, 0.75);
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 8px rgba(0, 200, 255, 0.6);
+      pointer-events: none;
+    }
+
+    #hint {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      color: rgba(255, 255, 255, 0.25);
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <video id="video-preview" autoplay playsinline muted></video>
+  <div id="status">Инициализация...</div>
+  <div id="hint">W — wireframe / solid</div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
