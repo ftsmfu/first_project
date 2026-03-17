@@ -49,13 +49,18 @@ export class FaceTracker {
   }
 
   async detect() {
-    if (!this.detector || this.video.readyState < 2) return null
+    if (!this.detector || this.video.readyState < 2) {
+      console.log('detect blocked: detector=', !!this.detector, 'readyState=', this.video.readyState)
+      return null
+    }
     try {
       const faces = await this.detector.estimateFaces(this.video, {
         flipHorizontal: false,
       })
+      console.log('faces found:', faces.length)
       return faces.length > 0 ? faces[0].keypoints : null
-    } catch {
+    } catch (e) {
+      console.error('detect error:', e)
       return null
     }
   }
