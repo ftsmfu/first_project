@@ -1,5 +1,5 @@
+import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-backend-webgl'
-import * as tf from '@tensorflow/tfjs-core'
 import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection'
 
 export class FaceTracker {
@@ -45,7 +45,7 @@ export class FaceTracker {
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
     this.detector = await faceLandmarksDetection.createDetector(model, {
       runtime: 'tfjs',
-      refineLandmarks: true,
+      refineLandmarks: false,
       maxFaces: 1,
     })
   }
