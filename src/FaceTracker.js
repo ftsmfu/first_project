@@ -26,6 +26,8 @@ export class FaceTracker {
     this.video.autoplay = true
     this.video.playsInline = true
     this.video.muted = true
+    this.video.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;'
+    document.body.appendChild(this.video)
 
     await new Promise((resolve) => {
       this.video.onloadedmetadata = () => {
