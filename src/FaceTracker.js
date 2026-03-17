@@ -56,6 +56,7 @@ export class FaceTracker {
       return null
     }
     try {
+      console.log('video:', this.video.videoWidth, 'x', this.video.videoHeight, 'readyState:', this.video.readyState, 'paused:', this.video.paused)
       const faces = await this.detector.estimateFaces(this.video, {
         flipHorizontal: false,
       })
