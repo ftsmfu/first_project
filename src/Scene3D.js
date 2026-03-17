@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { FACEMESH_TESSELATION } from '@mediapipe/face_mesh'
+import { FACEMESH_TESSELATION } from './facemesh_tesselation.js'
 
 export class Scene3D {
   constructor(container) {
