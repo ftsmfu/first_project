@@ -26,7 +26,7 @@ export class FaceTracker {
     this.video.autoplay = true
     this.video.playsInline = true
     this.video.muted = true
-    this.video.style.cssText = 'position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;'
+    this.video.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;'
     document.body.appendChild(this.video)
 
     await new Promise((resolve) => {
@@ -44,8 +44,7 @@ export class FaceTracker {
     await tf.ready()
     const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh
     this.detector = await faceLandmarksDetection.createDetector(model, {
-      runtime: 'mediapipe',
-      solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh',
+      runtime: 'tfjs',
       refineLandmarks: false,
       maxFaces: 1,
     })
