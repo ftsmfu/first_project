@@ -111,9 +111,14 @@ export class AvatarController {
     this._setMorph('eyeSquintRight', clamp(rightBlink * 0.5, 0, 1))
 
     // ── Рот — открытие (jawOpen) ───────────────────────────────────────────────
+    // Увеличен мёртвый порог (0.05 вместо 0.02): улыбка создаёт небольшой зазор,
+    // который не должна триггерить jawOpen
     const jawDist = dist2D(kp[LM.upperLipInner], kp[LM.lowerLipInner])
-    const jawOpen = clamp((jawDist / faceH - 0.02) / 0.13, 0, 1)
-    this._setMorph('jawOpen', jawOpen)
+    const jawOpen = clamp((jawDist / faceH - 0.05) / 0.10, 0, 1)
+    this._setMorph('jawOpen', jawOpen, 0.45)
+    // Нижняя губа вниз при открытии рта
+    this._setMorph('mouthLowerDownLeft',  jawOpen * 0.55, 0.45)
+    this._setMorph('mouthLowerDownRight', jawOpen * 0.55, 0.45)
 
     // ── Улыбка / недовольство ─────────────────────────────────────────────────
     const mouthTopY    = kp[LM.mouthTop].y
@@ -122,20 +127,38 @@ export class AvatarController {
     const leftCornerY  = kp[LM.mouthLeft].y
     const rightCornerY = kp[LM.mouthRight].y
 
-    const smileL = clamp((mouthCenterY - leftCornerY)  / faceH / 0.03, 0, 1)
-    const smileR = clamp((mouthCenterY - rightCornerY) / faceH / 0.03, 0, 1)
-    const frownL = clamp((leftCornerY  - mouthCenterY) / faceH / 0.03, 0, 1)
-    const frownR = clamp((rightCornerY - mouthCenterY) / faceH / 0.03, 0, 1)
+    // Горизонтальное растяжение рта — дополнительный сигнал улыбки
+    const mouthW     = dist2D(kp[LM.mouthLeft], kp[LM.mouthRight])
+    const mouthWNorm = mouthW / iod  // ≈ 0.47 нейтраль, ≈ 0.60 широкая улыбка
+    const widthSmile = clamp((mouthWNorm - 0.47) / 0.13, 0, 1)
 
-    this._setMorph('mouthSmileLeft',  smileL)
-    this._setMorph('mouthSmileRight', smileR)
-    this._setMorph('mouthFrownLeft',  frownL)
-    this._setMorph('mouthFrownRight', frownR)
+    // Вертикальный подъём углов (уменьшен порог 0.022 вместо 0.03 — чувствительнее)
+    const cornerUpL = clamp((mouthCenterY - leftCornerY)  / faceH / 0.022, 0, 1)
+    const cornerUpR = clamp((mouthCenterY - rightCornerY) / faceH / 0.022, 0, 1)
 
-    // ── Губы — горизонтальные выражения ───────────────────────────────────────
-    const mouthW = dist2D(kp[LM.mouthLeft], kp[LM.mouthRight])
-    const mouthPucker = clamp(1 - mouthW / iod / 0.55, 0, 1)
-    this._setMorph('mouthPucker', mouthPucker)
+    const smileL = clamp(cornerUpL + widthSmile * 0.4, 0, 1)
+    const smileR = clamp(cornerUpR + widthSmile * 0.4, 0, 1)
+
+    this._setMorph('mouthSmileLeft',  smileL, 0.45)
+    this._setMorph('mouthSmileRight', smileR, 0.45)
+
+    // Верхняя губа вверх при улыбке → показываем зубы
+    this._setMorph('mouthUpperUpLeft',  smileL * 0.75, 0.45)
+    this._setMorph('mouthUpperUpRight', smileR * 0.75, 0.45)
+
+    // Ямочки при улыбке
+    this._setMorph('mouthDimpleLeft',  smileL * 0.5, 0.45)
+    this._setMorph('mouthDimpleRight', smileR * 0.5, 0.45)
+
+    // Недовольство — только если нет улыбки (взаимоисключение)
+    const frownL = clamp((leftCornerY  - mouthCenterY) / faceH / 0.022, 0, 1) * (1 - smileL)
+    const frownR = clamp((rightCornerY - mouthCenterY) / faceH / 0.022, 0, 1) * (1 - smileR)
+    this._setMorph('mouthFrownLeft',  frownL, 0.4)
+    this._setMorph('mouthFrownRight', frownR, 0.4)
+
+    // ── Губы трубочкой ────────────────────────────────────────────────────────
+    const mouthPucker = clamp(1 - mouthWNorm / 0.52, 0, 1)
+    this._setMorph('mouthPucker', mouthPucker, 0.4)
 
     // ── Брови ─────────────────────────────────────────────────────────────────
     const computeBrow = (browIn, browMid, browOut, eyeTop) => {
