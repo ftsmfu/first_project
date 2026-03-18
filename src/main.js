@@ -13,9 +13,9 @@ async function main() {
   statusEl.textContent = 'Загрузка TF.js модели...'
   await tracker.loadModel()
 
-  statusEl.textContent = 'Инициализация 3D сцены...'
+  statusEl.textContent = 'Загрузка аватара...'
   const scene = new Scene3D(document.getElementById('app'))
-  scene.init()
+  await scene.init()
 
   statusEl.textContent = 'Отслеживание...'
 
