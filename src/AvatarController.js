@@ -118,7 +118,7 @@ export class AvatarController {
 
     // ── Открытие челюсти ──────────────────────────────────────────────────────
     // Порог 0.06 — улыбка создаёт зазор ~0.03-0.04, не должна триггерить jawOpen
-    const jawOpen = clamp((hNorm - 0.06) / 0.12, 0, 1)
+    const jawOpen = clamp((hNorm - 0.06) / 0.12, 0, 1) * 0.38
     this._setMorph('jawOpen', jawOpen, 0.45)
     this._setMorph('mouthLowerDownLeft',  jawOpen * 0.5, 0.45)
     this._setMorph('mouthLowerDownRight', jawOpen * 0.5, 0.45)
