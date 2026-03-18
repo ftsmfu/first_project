@@ -113,8 +113,7 @@ export class AvatarController {
     // ── Рот — открытие (jawOpen) ───────────────────────────────────────────────
     const jawDist = dist2D(kp[LM.upperLipInner], kp[LM.lowerLipInner])
     const jawOpen = clamp((jawDist / faceH - 0.02) / 0.13, 0, 1)
-    this._setMorph('jawOpen',    jawOpen)
-    this._setMorph('mouthClose', clamp(1 - jawOpen * 3, 0, 1))
+    this._setMorph('jawOpen', jawOpen)
 
     // ── Улыбка / недовольство ─────────────────────────────────────────────────
     const mouthTopY    = kp[LM.mouthTop].y
@@ -170,9 +169,8 @@ export class AvatarController {
       const eyeMidY = (lec.y + rec.y) / 2
       const nose    = kp[LM.noseTip]
 
-      // Рыскание (yaw): нос правее центра → голова повёрнута вправо
-      // landmarks не зеркальны (flipHorizontal: false), поэтому знак прямой
-      const yawTarget  = ((nose.x - eyeMidX) / iod) * 1.4
+      // Рыскание (yaw): инвертируем — камера не зеркалит landmarks
+      const yawTarget  = -((nose.x - eyeMidX) / iod) * 1.4
 
       // Наклон (pitch): нос ниже центра глаз → голова наклонена вниз
       const pitchTarget = ((nose.y - eyeMidY) / iod - 0.55) * 0.9
